@@ -9,21 +9,6 @@ Responsibilities:
   - resolve attack/backend classes
   - build LLMDebateRunSpec with real ACI backend+attack factories
 
-Does NOT:
-  - run CASPIAN detector
-  - write CSVs
-  - use old CascadeDetector, warmup, or scoring logic
-
-Expected layout:
-  caspian-mas/
-    aciarena/
-      aciarena/
-        evaluation/datasets/maspi_math.json
-        evaluation/datasets/maspi_code.json
-        attacks/
-        mas/
-    adapters/benchmarks/aciarena.py
-
 Usage:
   python -m experiments.run_matrix \\
     --benchmark ACIArena \\
