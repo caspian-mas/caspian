@@ -249,3 +249,188 @@ CASPIAN reports both detection and attribution metrics.
 | Spine Jaccard@3  | overlap between recovered and ground-truth propagation paths |
 | Channel Accuracy | dominant propagation channel correctly identified |
 | Attribution Lag  | delay between cascade onset and successful attribution |
+
+## Evaluation
+ 
+CASPIAN separates detection evaluation and attribution evaluation.
+ 
+### Detection Evaluation
+ 
+Detection metrics are computed from each run directory's `task_metrics.csv`.
+The evaluator reports precision, recall, F1, accuracy, AUROC, TPR@5%FPR,
+EDR@1/3/5, MRR, and cascade-type breakdown when available.
+ 
+Evaluate a single run directory:
+ 
+```bash
+python -m eval.detection_eval \
+  --dir outputs/ACIArena/LLMDebate_standard
+```
+ 
+Evaluate all completed runs under `outputs/`:
+ 
+```bash
+python -m eval.detection_eval --all
+```
+ 
+Filter by benchmark or framework:
+ 
+```bash
+python -m eval.detection_eval --all --benchmark ACIArena
+python -m eval.detection_eval --all --framework LLMDebate
+```
+ 
+Compare multiple run directories:
+ 
+```bash
+python -m eval.detection_eval \
+  --compare outputs/ACIArena/LLMDebate_standard \
+             outputs/TAMAS/LLMDebate_standard
+```
+ 
+Export JSON:
+ 
+```bash
+python -m eval.detection_eval --all --json > detection_results.json
+```
+ 
+> For AUROC and TPR@5%FPR, each trace is scored by the strongest spectral propagation evidence observed across all turns. EDR@K is computed from the first online cascade alert time relative to cascade onset.
+ 
+---
+ 
+### Attribution Ground Truth
+ 
+Attribution evaluation requires a `gt_attribution.json` file per run directory.
+Ground truth is derived from scenario structure and framework topology — including
+the injected origin agent, expected relay agents, and expected propagation spines.
+ 
+Generate ground truth for all outputs:
+ 
+```bash
+python -m eval.generate_attribution_gt --all
+```
+ 
+Generate ground truth for a single run:
+ 
+```bash
+python -m eval.generate_attribution_gt \
+  --task_csv outputs/ACIArena/LLMDebate_standard/task_metrics.csv \
+  --out       outputs/ACIArena/LLMDebate_standard/gt_attribution.json
+```
+ 
+---
+ 
+### Attribution Evaluation
+ 
+After generating `gt_attribution.json`, run attribution evaluation.
+ 
+Evaluate a single run directory:
+ 
+```bash
+python -m eval.attribution_eval \
+  --dir outputs/ACIArena/LLMDebate_standard
+```
+ 
+Evaluate all outputs:
+ 
+```bash
+python -m eval.attribution_eval --all
+```
+ 
+Use an explicit ground-truth file:
+ 
+```bash
+python -m eval.attribution_eval \
+  --dir outputs/ACIArena/LLMDebate_standard \
+  --gt  outputs/ACIArena/LLMDebate_standard/gt_attribution.json
+```
+ 
+Export JSON:
+ 
+```bash
+python -m eval.attribution_eval --all --json > attribution_results.json
+```
+ 
+Attribution metrics reported: origin accuracy, amplifier accuracy, bridge accuracy,
+Spine Jaccard@3, Spine Jaccard@5, and dominant channel accuracy.
+ 
+---
+ 
+### Low-Level Metric Utility
+ 
+For direct metric computation from a single `task_metrics.csv`:
+ 
+```bash
+python -m eval.metrics outputs/TAMAS/AutoGen_RoundRobin/task_metrics.csv
+```
+ 
+With attribution ground truth:
+ 
+```bash
+python -m eval.metrics \
+  outputs/TAMAS/AutoGen_RoundRobin/task_metrics.csv \
+  --gt outputs/TAMAS/AutoGen_RoundRobin/gt_attribution.json
+```
+ 
+JSON output:
+ 
+```bash
+python -m eval.metrics \
+  outputs/TAMAS/AutoGen_RoundRobin/task_metrics.csv \
+  --gt outputs/TAMAS/AutoGen_RoundRobin/gt_attribution.json \
+  --json
+```
+ 
+---
+ 
+## Output Files
+ 
+Each experiment directory may contain:
+ 
+| File                  | Description |
+|-----------------------|-------------|
+| `task_metrics.csv`    | scenario-level detection results |
+| `turn_metrics.csv`    | turn-level spectral and channel signals |
+| `cascade_reports.csv` | cascade decisions and attribution summaries |
+| `logs/`               | framework-specific trace logs |
+| `matrices/`           | cached influence matrices, when enabled |
+ 
+Example output directory:
+ 
+```
+outputs/TAMAS/AutoGen_RoundRobin/
+```
+
+---
+
+## Notes on Reproducibility
+ 
+LLM-based multi-agent experiments can vary due to model sampling, API behavior, framework versions, and tool execution state. For stable reproduction:
+ 
+- keep model and decoding settings fixed;
+- keep benchmark files unchanged;
+- avoid mixing outputs from different detector versions;
+- clear old `outputs/` directories before rerunning final experiments;
+- record model names, framework versions, and run timestamps.
+Bootstrap confidence intervals in the paper are computed by trace-level resampling over the collected evaluation traces. They quantify sampling variability over the evaluated trace population, not repeated-run stochasticity from rerunning LLM generations.
+
+---
+ 
+## Responsible Use
+ 
+This code is intended for research on multi-agent safety, cascade detection, and system-level auditing. The benchmark adapters include adversarial scenarios for evaluating robustness. Do not use these attacks or prompts against systems without caution.
+ 
+---
+ 
+## Citation
+ 
+Citation information will be added after the review period.
+ 
+```bibtex
+@article{anonymous2026caspian,
+  title   = {CASPIAN: Online Detection and Attribution of Cascade Attacks in LLM Multi-Agent Systems via Cross-Channel Causal Monitoring},
+  author  = {Anonymous},
+  journal = {Under review},
+  year    = {2026}
+}
+```
