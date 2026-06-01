@@ -98,7 +98,154 @@ Attribution is performed online without replaying the full trace or invoking add
 ├── README.md                 
 
 ```
+
+---
+
+## Installation
  
-> The repository is being actively cleaned and updated for the review artifact. Some paths may change slightly as the codebase is finalized.
+Create a fresh environment:
+ 
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+ 
+For framework-specific integrations, install the corresponding framework dependencies as needed. If using MetaGPT through a separate environment, set:
+ 
+```bash
+export METAGPT_PYTHON=/path/to/metagpt_env/bin/python3
+```
+ 
+Set any required LLM provider keys in your shell environment before running experiments.
  
 ---
+
+## Quick Start
+ 
+Run a small smoke test over representative benchmark/framework combinations:
+ 
+```bash
+python -m experiments.smoke_test --n 3 --timeout 300
+```
+ 
+This creates output directories under `outputs/` and runs a small number of benign and attack traces to verify that adapters, detector logic, and metric computation are functioning.
+ 
+---
+
+## Running Experiments
+ 
+### TAMAS
+ 
+Example: AutoGen with round-robin configuration.
+ 
+```bash
+python -m experiments.run_matrix \
+  --benchmark TAMAS \
+  --framework AutoGen \
+  --config RoundRobin \
+  --model <MODEL_NAME> \
+  --attack_only \
+  --limit 10 \
+  --timeout 300
+```
+ 
+Run benign traces:
+ 
+```bash
+python -m experiments.run_matrix \
+  --benchmark TAMAS \
+  --framework AutoGen \
+  --config RoundRobin \
+  --model <MODEL_NAME> \
+  --benign_only \
+  --limit 10 \
+  --timeout 300
+```
+ 
+### ACIArena
+ 
+Example: MetaGPT with all attack categories.
+ 
+```bash
+python -m experiments.run_matrix \
+  --benchmark ACIArena \
+  --framework MetaGPT \
+  --config standard \
+  --model <MODEL_NAME> \
+  --aci_attack all \
+  --max_turn 3 \
+  --limit 10 \
+  --timeout 300
+```
+ 
+Run benign ACIArena traces:
+ 
+```bash
+python -m experiments.run_matrix \
+  --benchmark ACIArena \
+  --framework MetaGPT \
+  --config standard \
+  --model <MODEL_NAME> \
+  --aci_attack NoneAttack \
+  --max_turn 3 \
+  --limit 10 \
+  --timeout 300
+```
+
+ ## Experiments Benchmarks and Frameworks
+ 
+Experiments use the below cascade-attack evaluation benchmarks:
+ 
+| Benchmark | Focus |
+|-----------|-------|
+| TAMAS     | adversarial robustness in LLM multi-agent systems |
+| ACIArena  | cascading injection attacks across MAS topologies |
+ 
+MAS frameworks:
+ 
+| Framework  | Status    |
+|------------|-----------|
+| AutoGen    | supported |
+| CrewAI     | supported |
+| MetaGPT    | supported |
+| LLM Debate | supported |
+
+### Evaluation Scale
+ 
+The full evaluation uses:
+ 
+| Benchmark | Scenarios | Framework-Specific Traces |
+|-----------|-----------|--------------------------|
+| TAMAS     | 400       | 1,600                    |
+| ACIArena  | 327       | 1,308                    |
+| **Total** | **727**   | **2,908**                |
+ 
+The evaluation includes benign traces and attacks grouped into intent/disclosure, execution/disruption, and coordination/hijacking categories.
+ 
+---
+
+## Metrics
+ 
+CASPIAN reports both detection and attribution metrics.
+ 
+### Detection
+ 
+| Metric              | Description |
+|---------------------|-------------|
+| AUROC               | threshold-swept separability between benign and attack traces |
+| TPR@5%FPR           | true positive rate at a fixed 5% false-positive budget |
+| EDR@5               | fraction of attacks detected within five turns of cascade onset |
+| Precision / Recall / F1 | binary alert quality under the default online detector |
+
+### Attribution
+ 
+| Metric           | Description |
+|------------------|-------------|
+| Origin Acc@1     | top-ranked origin matches the ground-truth injection source |
+| Amplifier Acc@1  | top-ranked amplifier matches the ground-truth amplifier |
+| Bridge Acc@1     | top-ranked bridge matches the ground-truth relay agent |
+| Joint Acc@1      | origin, amplifier, and bridge all correct simultaneously |
+| Spine Jaccard@3  | overlap between recovered and ground-truth propagation paths |
+| Channel Accuracy | dominant propagation channel correctly identified |
+| Attribution Lag  | delay between cascade onset and successful attribution |
