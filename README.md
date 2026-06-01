@@ -4,7 +4,7 @@
  
 > This repository accompanies an anonymous NeurIPS submission. Author-identifying information has been removed for double-blind review.
  
-<p align="left">
+<p align="center">
   <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/Status-Review%20Artifact-6B7280" />
   <img src="https://img.shields.io/badge/LLM--MAS-Safety-111827" />
