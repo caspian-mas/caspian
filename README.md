@@ -1,4 +1,4 @@
-# CASPIAN: Online Detection and Attribution of Cascade Attacks in LLM Multi-Agent Systems via Cross-Channel Causal Monitoring**
+# CASPIAN: Online Detection and Attribution of Cascade Attacks in LLM Multi-Agent Systems via Cross-Channel Causal Monitoring
  
 > This repository accompanies an anonymous NeurIPS submission. Author-identifying information has been removed for double-blind review.
  
