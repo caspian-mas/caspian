@@ -4,7 +4,6 @@ adapters/benchmarks/tamas.py
 TAMAS benchmark adapter for CASPIAN.
 
 Loads TAMAS task JSON files and yields Scenario objects.
-No framework, no runtime, no detector logic in this file.
 
 TAMAS folder structure:
   TAMAS/data/
