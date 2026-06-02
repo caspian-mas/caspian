@@ -15,9 +15,6 @@ What is derived on retrieval:
   A_bar_max     elementwise max of A_tilde over [t_w, t_0]   (paper §4.4)
   A_ch_bar_max  elementwise max of A_tilde_c over [t_w, t_0]
 
-Cache is bounded: evicts turns older than MAX_CACHE_TURNS = MAX_WINDOW + 2.
-
-Paper refs: §4.4, §3.4
 """
 
 from __future__ import annotations
