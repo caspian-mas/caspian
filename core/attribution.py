@@ -30,8 +30,6 @@ Identifies four components of a detected cascade (paper §4.4):
       K paths ranked by weakest-link strength on A_bar_max.
       Path length bounded by graph diameter.
       Dominant channel per spine from A_ch_bar_max.
-
-Paper refs: §3.4, §4.4
 """
 
 from __future__ import annotations
