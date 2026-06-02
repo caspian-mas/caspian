@@ -19,10 +19,6 @@ Per turn:
 Shrinkage and jitter applied to Sigma before inversion.
 Never stored back to state — state always holds the raw EMA covariance.
 
-Paper refs:
-  §5          LI-CTE definition and Gaussian CMI formula
-  Appendix B  Full Schur-complement derivation
-  Appendix F-3  Operational steps
 """
 
 from __future__ import annotations
