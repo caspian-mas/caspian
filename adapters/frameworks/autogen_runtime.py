@@ -9,12 +9,6 @@ Owns:
   - AssistantAgent construction per scenario
   - team construction (RoundRobin / Swarm / MagenticOne)
 
-Does NOT own:
-  - stream message parsing (autogen.py)
-  - topology construction (autogen.py: build_topology)
-  - TAMAS scenario loading (tamas.py)
-  - CASPIAN pipeline (core/pipeline.py)
-
 TAMAS tool modules must be importable — caller is responsible for
 adding TAMAS/data/tools/autogen/ to sys.path before importing this module.
 """
