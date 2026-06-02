@@ -25,7 +25,6 @@ Signals (paper §4.3.1):
   H_norm       Normalized Shannon entropy over channel Perron roots
   cross_channel H_norm >= 0.5
 
-Paper refs: §3.2, §4.3.1
 """
 
 from __future__ import annotations
