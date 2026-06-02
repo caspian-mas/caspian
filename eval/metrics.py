@@ -2,7 +2,6 @@
 eval/metrics.py
 
 CASPIAN evaluation metrics — detection and attribution.
-Faithful to paper §3.3 (detection) and §3.4 (attribution).
 
 Detection metrics
 -----------------
@@ -18,7 +17,7 @@ Paper-specific:
   MRR            Mean Reciprocal Rank = mean(1/t_0) over true positives;
                  higher means earlier detection
 
-Attribution metrics (§3.4)
+Attribution metrics
 --------------------------
 When ground-truth attribution is available:
   Origin accuracy      predicted i_origin == GT i_origin
