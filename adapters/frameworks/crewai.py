@@ -8,7 +8,6 @@ Wraps every provided tool with a tracing wrapper that emits ChannelEvents direct
 Runs CrewAI in-process via asyncio.to_thread.
 
 No TAMAS imports. No ACIArena imports. No benchmark-specific logic.
-No subprocess. No temp files. No __TRACE__ parsing.
 
 Channel mapping:
   tool  every tool_call and tool_result from wrapped tools
